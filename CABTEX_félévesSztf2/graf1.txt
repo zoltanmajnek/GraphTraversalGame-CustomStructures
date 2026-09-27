@@ -1,0 +1,10 @@
+*A gráf megadása: Rajzolja meg a gráfot a következõképpen: csúcsok O, gép kezdõpont 1 , játékos lehetséges kezdõpontok J, élek -|\/, üres helyek szóköz.*
+ J-O   1  O-O-O    O
+ |/|   |    |     /|
+ O O-O-O--O-O----O |
+ |  \              | 
+ |   \         J---O
+ |    \       / \ /
+ O-----J-O-O-O   O
+        \       /
+         O-----O
