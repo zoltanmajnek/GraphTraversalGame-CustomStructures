@@ -1,5 +1,5 @@
 # Graph Traversal vs. AI Game 
-This repository contains the original university project code from 2024. I am currently actively refactoring the project to apply modern clean code principles, which includes translating Hungarian variable/class names and comments into English.
+This repository contains my original university project code from 2024. I am currently actively refactoring the project to apply modern clean code principles, which includes translating Hungarian variable/class names and comments into English.
 
 ## Overview
 A graph traversal game built in C# where the player competes against a computer opponent. The player's objective is to navigate the graph and reach the central "computer" (target node). Meanwhile, the AI dynamically cuts edges between nodes to block the player's path and prevent them from winning.
