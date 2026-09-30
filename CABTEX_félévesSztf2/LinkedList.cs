@@ -14,14 +14,22 @@ namespace CABTEX_félévesSztf2
         }
     }
 
-    public class LáncoltLista<T> : IEnumerable, IEnumerator
+    /// <summary>
+    /// Generic linked list implementation supporting multiple operations:
+    /// - Sorted insertion and removal
+    /// - Queue operations (Enqueue/Dequeue)
+    /// - Stack operations (Push/Pop)
+    /// - Set operations (Union, Intersection, Difference)
+    /// - Filtering and traversal
+    /// </summary>
+    public class LinkedList<T> : IEnumerable, IEnumerator
         where T : IComparable
     {
         M<T> fej;
         M<T> forEach;
         M<T> EnuMutato;
 
-        public LáncoltLista() { }
+        public LinkedList() { }
 
         public delegate void BejáróFunkció(T t);
         public delegate bool SzűrőFunckció(T t);
@@ -94,10 +102,10 @@ namespace CABTEX_félévesSztf2
             { if (előző == null) fej = mutato.next; else előző.next = mutato.next; }
         }
 
-        public LáncoltLista<T> Szűrés(SzűrőFunckció szűrő)
+        public LinkedList<T> Szűrés(SzűrőFunckció szűrő)
         {
             M<T> mutato = fej;
-            LáncoltLista<T> újlista = new LáncoltLista<T>();
+            LinkedList<T> újlista = new LinkedList<T>();
             while (mutato != null)
             {
                 if (szűrő(mutato.adat)) újlista.RendezveBeszúr(mutato.adat);
@@ -106,9 +114,9 @@ namespace CABTEX_félévesSztf2
             return újlista;
         }
 
-        public LáncoltLista<T> Metszet(LáncoltLista<T> lista2)
+        public LinkedList<T> Metszet(LinkedList<T> lista2)
         {
-            LáncoltLista<T> újlista = new LáncoltLista<T>();
+            LinkedList<T> újlista = new LinkedList<T>();
             M<T> m1 = fej; M<T> m2 = lista2.fej;
             while (m1 != null && m2 != null)
             {
@@ -120,9 +128,9 @@ namespace CABTEX_félévesSztf2
             return újlista;
         }
 
-        public LáncoltLista<T> Unió(LáncoltLista<T> lista2)
+        public LinkedList<T> Unió(LinkedList<T> lista2)
         {
-            LáncoltLista<T> újlista = new LáncoltLista<T>();
+            LinkedList<T> újlista = new LinkedList<T>();
             M<T> m1 = fej; M<T> m2 = lista2.fej;
             while (m1 != null && m2 != null)
             {
@@ -137,10 +145,10 @@ namespace CABTEX_félévesSztf2
             return újlista;
         }
 
-        public LáncoltLista<T> Különbség(LáncoltLista<T> lista2)
+        public LinkedList<T> Különbség(LinkedList<T> lista2)
         {
-            LáncoltLista<T> újlista = this.Szűrés((hős) => true);
-            LáncoltLista<T> metszet = this.Metszet(lista2);
+            LinkedList<T> újlista = this.Szűrés((hős) => true);
+            LinkedList<T> metszet = this.Metszet(lista2);
 
             M<T> m1 = metszet.fej;
             while (m1 != null) { újlista.Törlés(m1.adat); m1 = m1.next; }

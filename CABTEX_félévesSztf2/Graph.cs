@@ -23,11 +23,11 @@ namespace CABTEX_félévesSztf2
         {
             public T data { get; }
             public int Tav { get; set; }
-            public LáncoltLista<Node> Edges { get; }
+            public LinkedList<Node> Edges { get; }
             public Node(T data)
             {
                 this.data = data;
-                Edges = new LáncoltLista<Node>();
+                Edges = new LinkedList<Node>();
             }
 
             public int CompareTo(object obj)
@@ -36,7 +36,7 @@ namespace CABTEX_félévesSztf2
             }
         }
 
-        LáncoltLista<Node> Nodes;
+        LinkedList<Node> Nodes;
 
         int nodesNum;
         int connectedNodes;
@@ -49,9 +49,9 @@ namespace CABTEX_félévesSztf2
             return null;
         }
 
-        public LáncoltLista<T> Neighbors(T node)
+        public LinkedList<T> Neighbors(T node)
         {
-            LáncoltLista<T> nb = new LáncoltLista<T>();
+            LinkedList<T> nb = new LinkedList<T>();
             var RealNode = GetNodeFromData(node);
             if (RealNode != null)
             {
@@ -72,7 +72,7 @@ namespace CABTEX_félévesSztf2
         }
 
 
-        public Graph() { Nodes = new LáncoltLista<Node>(); }
+        public Graph() { Nodes = new LinkedList<Node>(); }
 
         public bool AddNode(T node)
         {
@@ -106,8 +106,8 @@ namespace CABTEX_félévesSztf2
         {
             connectedNodes = 1;
             Node nFrom = GetNodeFromData(from); if (nFrom == null) return 0;
-            LáncoltLista<Node> S = new LáncoltLista<Node>(); S.Sorbaszúr(nFrom);
-            LáncoltLista<Node> F = new LáncoltLista<Node>(); nFrom.Tav = 0; F.Sorbaszúr(nFrom);
+            LinkedList<Node> S = new LinkedList<Node>(); S.Sorbaszúr(nFrom);
+            LinkedList<Node> F = new LinkedList<Node>(); nFrom.Tav = 0; F.Sorbaszúr(nFrom);
 
             while (!S.Ures)
             {
@@ -128,9 +128,9 @@ namespace CABTEX_félévesSztf2
             return nodesNum == connectedNodes;
         }
 
-        public LáncoltLista<T> AllNodes()
+        public LinkedList<T> AllNodes()
         {
-            LáncoltLista<T> lista = new LáncoltLista<T>();
+            LinkedList<T> lista = new LinkedList<T>();
             foreach (Node node in Nodes) lista.RendezveBeszúr(node.data);
             return lista;
         }
@@ -140,8 +140,8 @@ namespace CABTEX_félévesSztf2
         public void FirstInfected(T from)
         {
             Node nFrom = GetNodeFromData(from);
-            LáncoltLista<Node> S = new LáncoltLista<Node>(); S.Sorbaszúr(nFrom);
-            LáncoltLista<Node> F = new LáncoltLista<Node>(); nFrom.Tav = 0; F.Sorbaszúr(nFrom);
+            LinkedList<Node> S = new LinkedList<Node>(); S.Sorbaszúr(nFrom);
+            LinkedList<Node> F = new LinkedList<Node>(); nFrom.Tav = 0; F.Sorbaszúr(nFrom);
             bool found = false;
 
             while (!S.Ures && !found)
@@ -159,12 +159,12 @@ namespace CABTEX_félévesSztf2
         public int DFS(T start)
         {
             int t = 0;
-            LáncoltLista<Node> F = new LáncoltLista<Node>();
+            LinkedList<Node> F = new LinkedList<Node>();
             var firstNode = GetNodeFromData(start);
             if (firstNode != null) DFSRek(firstNode, ref F, ref t);
             return t;
         }
-        void DFSRek(Node k, ref LáncoltLista<Node> F, ref int t)
+        void DFSRek(Node k, ref LinkedList<Node> F, ref int t)
         {
             bool tovabb = true;
             F.RendezveBeszúr(k); t++; if (process != null) tovabb = process(k.data);

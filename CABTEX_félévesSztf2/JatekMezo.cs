@@ -7,7 +7,7 @@ namespace CABTEX_félévesSztf2
     internal class JatekMezo
     {
         Graph<ND> JatekGraf { get; set; }
-        LáncoltLista<ND> LepesLista;
+        LinkedList<ND> LepesLista;
         public delegate void LepesTortent(ND lepes);
         public event LepesTortent lepesTortent;
         public string[] adat;
@@ -22,7 +22,7 @@ namespace CABTEX_félévesSztf2
         public void Betolt(string fNev)
         {
             PlayerNodes = new XY[20]; PN = 0; //kezdőhelyek
-            JatekGraf = new Graph<ND>(); LepesLista = new LáncoltLista<ND>(); Ready = false;
+            JatekGraf = new Graph<ND>(); LepesLista = new LinkedList<ND>(); Ready = false;
 
             void Csucskereso(int x, int y)
             {
@@ -182,12 +182,12 @@ namespace CABTEX_félévesSztf2
         public int JatekosLep()
         {
             int vanMegLepes = 0;
-            LáncoltLista<ND> valaszthato = new LáncoltLista<ND>();
-            LáncoltLista<ND> allNodes = JatekGraf.AllNodes();
+            LinkedList<ND> valaszthato = new LinkedList<ND>();
+            LinkedList<ND> allNodes = JatekGraf.AllNodes();
             foreach (ND node in allNodes)
                 if (node.Infected)
                 {
-                    LáncoltLista<ND> allSzomszed = JatekGraf.Neighbors(node);
+                    LinkedList<ND> allSzomszed = JatekGraf.Neighbors(node);
                     foreach (ND szomszCsucs in allSzomszed)
                         if (!szomszCsucs.Infected) valaszthato.RendezveBeszúr(szomszCsucs);
                 }
@@ -240,7 +240,7 @@ namespace CABTEX_félévesSztf2
         public void GepLep()
         {
             int probakSzama = 0; bool Eltavolitva = false;
-            LáncoltLista<ND> allNodes = JatekGraf.AllNodes();
+            LinkedList<ND> allNodes = JatekGraf.AllNodes();
 
             bool Torles(ND from, ND to)
             {
@@ -261,7 +261,7 @@ namespace CABTEX_félévesSztf2
                     foreach (ND node in allNodes)
                         if (!node.Infected)
                         {
-                            LáncoltLista<ND> allSzomszed = JatekGraf.Neighbors(node);
+                            LinkedList<ND> allSzomszed = JatekGraf.Neighbors(node);
                             foreach (ND szomszCsucs in allSzomszed)
                                 if (!szomszCsucs.Infected) // nem fertőzött csúcsból mindenképp eltávolítható?! 
                                 {
@@ -273,7 +273,7 @@ namespace CABTEX_félévesSztf2
 
             bool GepLepMoho(bool check)
             {
-                LáncoltLista<ND> mohoLista = new LáncoltLista<ND>();
+                LinkedList<ND> mohoLista = new LinkedList<ND>();
                 bool InfectedSearch(ND x, ND k)
                 {
                     x.AddSzomszed(k); mohoLista.Push(x);

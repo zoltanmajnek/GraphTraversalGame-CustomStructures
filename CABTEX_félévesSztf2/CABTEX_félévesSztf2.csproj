@@ -46,7 +46,7 @@
     <Compile Include="Graph.cs" />
     <Compile Include="JatekMezo.cs" />
     <Compile Include="JatekVezerlo.cs" />
-    <Compile Include="LáncoltLista.cs" />
+    <Compile Include="LinkedList.cs" />
     <Compile Include="ND.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
