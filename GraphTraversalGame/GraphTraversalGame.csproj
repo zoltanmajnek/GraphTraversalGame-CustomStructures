@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{02400F63-4C38-4072-8D8C-3F5FF76BE9A4}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>CABTEX_félévesSztf2</RootNamespace>
-    <AssemblyName>CABTEX_félévesSztf2</AssemblyName>
+    <RootNamespace>GraphTraversalGame</RootNamespace>
+    <AssemblyName>GraphTraversalGame</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
