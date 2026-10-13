@@ -3,11 +3,11 @@ using System.Collections;
 
 namespace GraphTraversalGame
 {
-    class M<T>
+    class Pointer<T>
     {
         public T adat;
-        public M<T> next;
-        public M(T adat, M<T> next)
+        public Pointer<T> next;
+        public Pointer(T adat, Pointer<T> next)
         {
             this.adat = adat;
             this.next = next;
@@ -25,9 +25,9 @@ namespace GraphTraversalGame
     public class LinkedList<T> : IEnumerable, IEnumerator
         where T : IComparable
     {
-        M<T> fej;
-        M<T> forEach;
-        M<T> EnuMutato;
+        Pointer<T> fej;
+        Pointer<T> forEach;
+        Pointer<T> EnuMutato;
 
         public LinkedList() { }
 
@@ -39,17 +39,17 @@ namespace GraphTraversalGame
 
         public bool RendezveBeszúr(T adat)
         {
-            M<T> mutato = fej; M<T> előző = null;
+            Pointer<T> mutato = fej; Pointer<T> előző = null;
             while (mutato != null && adat.CompareTo(mutato.adat) > 0) { előző = mutato; mutato = mutato.next; }
             if (mutato != null && adat.CompareTo(mutato.adat) == 0) return false;
-            if (előző == null) fej = new M<T>(adat, mutato); else előző.next = new M<T>(adat, mutato);
+            if (előző == null) fej = new Pointer<T>(adat, mutato); else előző.next = new Pointer<T>(adat, mutato);
             return true;
         }
         public void Sorbaszúr(T adat)
         {
-            M<T> mutato = fej; M<T> előző = null;
+            Pointer<T> mutato = fej; Pointer<T> előző = null;
             while (mutato != null) { előző = mutato; mutato = mutato.next; }
-            if (előző == null) fej = new M<T>(adat, mutato); else előző.next = new M<T>(adat, mutato);
+            if (előző == null) fej = new Pointer<T>(adat, mutato); else előző.next = new Pointer<T>(adat, mutato);
         }
         public T SorbólKiszed()
         {
@@ -58,7 +58,7 @@ namespace GraphTraversalGame
         }
         public bool Ures => fej == null;
 
-        public void Push(T adat) { var uj = new M<T>(adat, fej); fej = uj; }
+        public void Push(T adat) { var uj = new Pointer<T>(adat, fej); fej = uj; }
         public T Pop() => SorbólKiszed();
 
         public void BejarInit() => forEach = fej;
@@ -70,7 +70,7 @@ namespace GraphTraversalGame
 
         public void Bejáró()
         {
-            M<T> mutato = fej;
+            Pointer<T> mutato = fej;
             while (mutato != null)
             {
                 bejáróFunkció?.Invoke(mutato.adat);
@@ -80,7 +80,7 @@ namespace GraphTraversalGame
 
         public bool Keresés(T mit)
         {
-            M<T> mutato = fej;
+            Pointer<T> mutato = fej;
             while (mutato != null && !mutato.adat.Equals(mit)) mutato = mutato.next;
             if (mutato == null) return false;
             return true;
@@ -88,7 +88,7 @@ namespace GraphTraversalGame
 
         public void Törlés(string név)
         {
-            M<T> mutato = fej; M<T> előző = null;
+            Pointer<T> mutato = fej; Pointer<T> előző = null;
             while (mutato != null && !mutato.adat.Equals(név)) { előző = mutato; mutato = mutato.next; }
             if (mutato != null)
             { if (előző == null) fej = mutato.next; else előző.next = mutato.next; }
@@ -96,7 +96,7 @@ namespace GraphTraversalGame
 
         public void Törlés(T mit)
         {
-            M<T> mutato = fej; M<T> előző = null;
+            Pointer<T> mutato = fej; Pointer<T> előző = null;
             while (mutato != null && mit.CompareTo(mutato.adat) != 0) { előző = mutato; mutato = mutato.next; }
             if (mutato != null)
             { if (előző == null) fej = mutato.next; else előző.next = mutato.next; }
@@ -104,7 +104,7 @@ namespace GraphTraversalGame
 
         public LinkedList<T> Szűrés(SzűrőFunckció szűrő)
         {
-            M<T> mutato = fej;
+            Pointer<T> mutato = fej;
             LinkedList<T> újlista = new LinkedList<T>();
             while (mutato != null)
             {
@@ -117,7 +117,7 @@ namespace GraphTraversalGame
         public LinkedList<T> Metszet(LinkedList<T> lista2)
         {
             LinkedList<T> újlista = new LinkedList<T>();
-            M<T> m1 = fej; M<T> m2 = lista2.fej;
+            Pointer<T> m1 = fej; Pointer<T> m2 = lista2.fej;
             while (m1 != null && m2 != null)
             {
                 int comp = m1.adat.CompareTo(m2.adat);
@@ -131,7 +131,7 @@ namespace GraphTraversalGame
         public LinkedList<T> Unió(LinkedList<T> lista2)
         {
             LinkedList<T> újlista = new LinkedList<T>();
-            M<T> m1 = fej; M<T> m2 = lista2.fej;
+            Pointer<T> m1 = fej; Pointer<T> m2 = lista2.fej;
             while (m1 != null && m2 != null)
             {
                 int comp = m1.adat.CompareTo(m2.adat);
@@ -150,7 +150,7 @@ namespace GraphTraversalGame
             LinkedList<T> újlista = this.Szűrés((hős) => true);
             LinkedList<T> metszet = this.Metszet(lista2);
 
-            M<T> m1 = metszet.fej;
+            Pointer<T> m1 = metszet.fej;
             while (m1 != null) { újlista.Törlés(m1.adat); m1 = m1.next; }
 
             return újlista;
@@ -158,7 +158,7 @@ namespace GraphTraversalGame
 
         public IEnumerator GetEnumerator()
         {
-            this.EnuMutato = new M<T>(default(T), fej);
+            this.EnuMutato = new Pointer<T>(default(T), fej);
             return (IEnumerator)this;
         }
 
@@ -170,7 +170,7 @@ namespace GraphTraversalGame
 
         public void Reset()
         {
-            EnuMutato = new M<T>(default(T), fej);
+            EnuMutato = new Pointer<T>(default(T), fej);
         }
     }
 }
