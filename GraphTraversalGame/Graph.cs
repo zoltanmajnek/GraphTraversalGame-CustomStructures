@@ -43,8 +43,8 @@ namespace GraphTraversalGame
 
         Node GetNodeFromData(T data)
         {
-            Nodes.BejarInit(); Node keres;
-            do { keres = Nodes.KovAdat(); } while (keres != null && data.CompareTo(keres.data) > 0);
+            Nodes.IteratorInit(); Node keres;
+            do { keres = Nodes.NextData(); } while (keres != null && data.CompareTo(keres.data) > 0);
             if (keres != null && keres.data.CompareTo(data) == 0) return keres;
             return null;
         }
@@ -55,7 +55,7 @@ namespace GraphTraversalGame
             var RealNode = GetNodeFromData(node);
             if (RealNode != null)
             {
-                foreach (Node edge in RealNode.Edges) nb.RendezveBeszúr(edge.data);
+                foreach (Node edge in RealNode.Edges) nb.SortedInsert(edge.data);
             }
             return nb;
         }
@@ -76,7 +76,7 @@ namespace GraphTraversalGame
 
         public bool AddNode(T node)
         {
-            if (Nodes.RendezveBeszúr(new Node(node))) { nodesNum++; return true; }
+            if (Nodes.SortedInsert(new Node(node))) { nodesNum++; return true; }
             return false;
         }
 
@@ -86,8 +86,8 @@ namespace GraphTraversalGame
             var nodeTo = GetNodeFromData(to);
             if (nodeFrom != null && nodeTo != null && from.CompareTo(to) != 0)
             {
-                nodeFrom.Edges.RendezveBeszúr(nodeTo);
-                nodeTo.Edges.RendezveBeszúr(nodeFrom);
+                nodeFrom.Edges.SortedInsert(nodeTo);
+                nodeTo.Edges.SortedInsert(nodeFrom);
             }
         }
 
@@ -97,8 +97,8 @@ namespace GraphTraversalGame
             var nodeTo = GetNodeFromData(to);
             if (nodeFrom != null && nodeTo != null && from.CompareTo(to) != 0)
             {
-                nodeFrom.Edges.Törlés(nodeTo);
-                nodeTo.Edges.Törlés(nodeFrom);
+                nodeFrom.Edges.Delete(nodeTo);
+                nodeTo.Edges.Delete(nodeFrom);
             }
         }
 
@@ -106,17 +106,17 @@ namespace GraphTraversalGame
         {
             connectedNodes = 1;
             Node nFrom = GetNodeFromData(from); if (nFrom == null) return 0;
-            LinkedList<Node> S = new LinkedList<Node>(); S.Sorbaszúr(nFrom);
-            LinkedList<Node> F = new LinkedList<Node>(); nFrom.Tav = 0; F.Sorbaszúr(nFrom);
+            LinkedList<Node> S = new LinkedList<Node>(); S.RowInsert(nFrom);
+            LinkedList<Node> F = new LinkedList<Node>(); nFrom.Tav = 0; F.RowInsert(nFrom);
 
-            while (!S.Ures)
+            while (!S.Empty)
             {
-                Node k = S.SorbólKiszed();
+                Node k = S.RowOut();
                 if (from.CompareTo(to) == 0) process?.Invoke(k.data);
                 else if (k.data.CompareTo(to) == 0) return k.Tav;
                 foreach (Node node in k.Edges)
-                    if (!F.Keresés(node))
-                    { S.Sorbaszúr(node); node.Tav = k.Tav + 1; F.Sorbaszúr(node); connectedNodes++; }
+                    if (!F.Search(node))
+                    { S.RowInsert(node); node.Tav = k.Tav + 1; F.RowInsert(node); connectedNodes++; }
             }
             return 0;
         }
@@ -131,7 +131,7 @@ namespace GraphTraversalGame
         public LinkedList<T> AllNodes()
         {
             LinkedList<T> lista = new LinkedList<T>();
-            foreach (Node node in Nodes) lista.RendezveBeszúr(node.data);
+            foreach (Node node in Nodes) lista.SortedInsert(node.data);
             return lista;
         }
 
@@ -140,17 +140,17 @@ namespace GraphTraversalGame
         public void FirstInfected(T from)
         {
             Node nFrom = GetNodeFromData(from);
-            LinkedList<Node> S = new LinkedList<Node>(); S.Sorbaszúr(nFrom);
-            LinkedList<Node> F = new LinkedList<Node>(); nFrom.Tav = 0; F.Sorbaszúr(nFrom);
+            LinkedList<Node> S = new LinkedList<Node>(); S.RowInsert(nFrom);
+            LinkedList<Node> F = new LinkedList<Node>(); nFrom.Tav = 0; F.RowInsert(nFrom);
             bool found = false;
 
-            while (!S.Ures && !found)
+            while (!S.Empty && !found)
             {
-                Node k = S.SorbólKiszed();
+                Node k = S.RowOut();
                 foreach (Node x in k.Edges)
-                    if (!F.Keresés(x) && !found)
+                    if (!F.Search(x) && !found)
                     {
-                        S.Sorbaszúr(x); F.Sorbaszúr(x);
+                        S.RowInsert(x); F.RowInsert(x);
                         if (dataProcess != null) found = dataProcess(x.data, k.data);
                     }
             }
@@ -167,9 +167,9 @@ namespace GraphTraversalGame
         void DFSRek(Node k, ref LinkedList<Node> F, ref int t)
         {
             bool tovabb = true;
-            F.RendezveBeszúr(k); t++; if (process != null) tovabb = process(k.data);
+            F.SortedInsert(k); t++; if (process != null) tovabb = process(k.data);
             if (tovabb) foreach (Node node in k.Edges)
-                    if (!F.Keresés(node))
+                    if (!F.Search(node))
                     { DFSRek(node, ref F, ref t); }
             k.Tav = t++;
         }

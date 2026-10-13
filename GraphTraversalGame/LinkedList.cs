@@ -5,11 +5,11 @@ namespace GraphTraversalGame
 {
     class Pointer<T>
     {
-        public T adat;
+        public T data;
         public Pointer<T> next;
-        public Pointer(T adat, Pointer<T> next)
+        public Pointer(T data, Pointer<T> next)
         {
-            this.adat = adat;
+            this.data = data;
             this.next = next;
         }
     }
@@ -25,152 +25,152 @@ namespace GraphTraversalGame
     public class LinkedList<T> : IEnumerable, IEnumerator
         where T : IComparable
     {
-        Pointer<T> fej;
+        Pointer<T> head;
         Pointer<T> forEach;
-        Pointer<T> EnuMutato;
+        Pointer<T> EnumeratorPointer;
 
         public LinkedList() { }
 
-        public delegate void BejáróFunkció(T t);
-        public delegate bool SzűrőFunckció(T t);
-        public BejáróFunkció bejáróFunkció;
+        public delegate void IteratorFunction(T t);
+        public delegate bool FilterFunction(T t);
+        public IteratorFunction iteratorFunction;
 
-        public object Current => EnuMutato.adat;
+        public object Current => EnumeratorPointer.data;
 
-        public bool RendezveBeszúr(T adat)
+        public bool SortedInsert(T data)
         {
-            Pointer<T> mutato = fej; Pointer<T> előző = null;
-            while (mutato != null && adat.CompareTo(mutato.adat) > 0) { előző = mutato; mutato = mutato.next; }
-            if (mutato != null && adat.CompareTo(mutato.adat) == 0) return false;
-            if (előző == null) fej = new Pointer<T>(adat, mutato); else előző.next = new Pointer<T>(adat, mutato);
+            Pointer<T> pointer = head; Pointer<T> previous = null;
+            while (pointer != null && data.CompareTo(pointer.data) > 0) { previous = pointer; pointer = pointer.next; }
+            if (pointer != null && data.CompareTo(pointer.data) == 0) return false;
+            if (previous == null) head = new Pointer<T>(data, pointer); else previous.next = new Pointer<T>(data, pointer);
             return true;
         }
-        public void Sorbaszúr(T adat)
+        public void RowInsert(T data)
         {
-            Pointer<T> mutato = fej; Pointer<T> előző = null;
-            while (mutato != null) { előző = mutato; mutato = mutato.next; }
-            if (előző == null) fej = new Pointer<T>(adat, mutato); else előző.next = new Pointer<T>(adat, mutato);
+            Pointer<T> pointer = head; Pointer<T> previous = null;
+            while (pointer != null) { previous = pointer; pointer = pointer.next; }
+            if (previous == null) head = new Pointer<T>(data, pointer); else previous.next = new Pointer<T>(data, pointer);
         }
-        public T SorbólKiszed()
+        public T RowOut()
         {
-            if (fej != null) { T ki = fej.adat; fej = fej.next; return ki; }
+            if (head != null) { T ki = head.data; head = head.next; return ki; }
             return default(T);
         }
-        public bool Ures => fej == null;
+        public bool Empty => head == null;
 
-        public void Push(T adat) { var uj = new Pointer<T>(adat, fej); fej = uj; }
-        public T Pop() => SorbólKiszed();
+        public void Push(T data) { var newPointer = new Pointer<T>(data, head); head = newPointer; }
+        public T Pop() => RowOut();
 
-        public void BejarInit() => forEach = fej;
-        public T KovAdat()
+        public void IteratorInit() => forEach = head;
+        public T NextData()
         {
             if (forEach == null) return default(T);
-            T ki = forEach.adat; forEach = forEach.next; return ki;
+            T data = forEach.data; forEach = forEach.next; return data;
         }
 
-        public void Bejáró()
+        public void Iterator()
         {
-            Pointer<T> mutato = fej;
-            while (mutato != null)
+            Pointer<T> pointer = head;
+            while (pointer != null)
             {
-                bejáróFunkció?.Invoke(mutato.adat);
-                mutato = mutato.next;
+                iteratorFunction?.Invoke(pointer.data);
+                pointer = pointer.next;
             }
         }
 
-        public bool Keresés(T mit)
+        public bool Search(T item)
         {
-            Pointer<T> mutato = fej;
-            while (mutato != null && !mutato.adat.Equals(mit)) mutato = mutato.next;
-            if (mutato == null) return false;
+            Pointer<T> pointer = head;
+            while (pointer != null && !pointer.data.Equals(item)) pointer = pointer.next;
+            if (pointer == null) return false;
             return true;
         }
 
-        public void Törlés(string név)
+        public void Delete(string name)
         {
-            Pointer<T> mutato = fej; Pointer<T> előző = null;
-            while (mutato != null && !mutato.adat.Equals(név)) { előző = mutato; mutato = mutato.next; }
-            if (mutato != null)
-            { if (előző == null) fej = mutato.next; else előző.next = mutato.next; }
+            Pointer<T> pointer = head; Pointer<T> previous = null;
+            while (pointer != null && !pointer.data.Equals(name)) { previous = pointer; pointer = pointer.next; }
+            if (pointer != null)
+            { if (previous == null) head = pointer.next; else previous.next = pointer.next; }
         }
 
-        public void Törlés(T mit)
+        public void Delete(T item)
         {
-            Pointer<T> mutato = fej; Pointer<T> előző = null;
-            while (mutato != null && mit.CompareTo(mutato.adat) != 0) { előző = mutato; mutato = mutato.next; }
-            if (mutato != null)
-            { if (előző == null) fej = mutato.next; else előző.next = mutato.next; }
+            Pointer<T> pointer = head; Pointer<T> previous = null;
+            while (pointer != null && item.CompareTo(pointer.data) != 0) { previous = pointer; pointer = pointer.next; }
+            if (pointer != null)
+            { if (previous == null) head = pointer.next; else previous.next = pointer.next; }
         }
 
-        public LinkedList<T> Szűrés(SzűrőFunckció szűrő)
+        public LinkedList<T> Filter(FilterFunction szűrő)
         {
-            Pointer<T> mutato = fej;
-            LinkedList<T> újlista = new LinkedList<T>();
-            while (mutato != null)
+            Pointer<T> pointer = head;
+            LinkedList<T> newList = new LinkedList<T>();
+            while (pointer != null)
             {
-                if (szűrő(mutato.adat)) újlista.RendezveBeszúr(mutato.adat);
-                mutato = mutato.next;
+                if (szűrő(pointer.data)) newList.SortedInsert(pointer.data);
+                pointer = pointer.next;
             }
-            return újlista;
+            return newList;
         }
 
-        public LinkedList<T> Metszet(LinkedList<T> lista2)
+        public LinkedList<T> Intersection(LinkedList<T> list2)
         {
-            LinkedList<T> újlista = new LinkedList<T>();
-            Pointer<T> m1 = fej; Pointer<T> m2 = lista2.fej;
+            LinkedList<T> newList = new LinkedList<T>();
+            Pointer<T> m1 = head; Pointer<T> m2 = list2.head;
             while (m1 != null && m2 != null)
             {
-                int comp = m1.adat.CompareTo(m2.adat);
+                int comp = m1.data.CompareTo(m2.data);
                 if (comp < 0) m1 = m1.next;
                 else if (comp > 0) m2 = m2.next;
-                else { újlista.RendezveBeszúr(m1.adat); m1 = m1.next; m2 = m2.next; }
+                else { newList.SortedInsert(m1.data); m1 = m1.next; m2 = m2.next; }
             }
-            return újlista;
+            return newList;
         }
 
-        public LinkedList<T> Unió(LinkedList<T> lista2)
+        public LinkedList<T> Union(LinkedList<T> list2)
         {
             LinkedList<T> újlista = new LinkedList<T>();
-            Pointer<T> m1 = fej; Pointer<T> m2 = lista2.fej;
+            Pointer<T> m1 = head; Pointer<T> m2 = list2.head;
             while (m1 != null && m2 != null)
             {
-                int comp = m1.adat.CompareTo(m2.adat);
-                if (comp == -1) { újlista.RendezveBeszúr(m1.adat); m1 = m1.next; }
-                else if (comp == 1) { újlista.RendezveBeszúr(m2.adat); m2 = m2.next; }
-                else { újlista.RendezveBeszúr(m1.adat); m1 = m1.next; m2 = m2.next; }
+                int comp = m1.data.CompareTo(m2.data);
+                if (comp == -1) { újlista.SortedInsert(m1.data); m1 = m1.next; }
+                else if (comp == 1) { újlista.SortedInsert(m2.data); m2 = m2.next; }
+                else { újlista.SortedInsert(m1.data); m1 = m1.next; m2 = m2.next; }
             }
-            while (m1 != null) { újlista.RendezveBeszúr(m1.adat); m1 = m1.next; }
-            while (m2 != null) { újlista.RendezveBeszúr(m2.adat); m2 = m2.next; }
+            while (m1 != null) { újlista.SortedInsert(m1.data); m1 = m1.next; }
+            while (m2 != null) { újlista.SortedInsert(m2.data); m2 = m2.next; }
 
             return újlista;
         }
 
-        public LinkedList<T> Különbség(LinkedList<T> lista2)
+        public LinkedList<T> Difference(LinkedList<T> lista2)
         {
-            LinkedList<T> újlista = this.Szűrés((hős) => true);
-            LinkedList<T> metszet = this.Metszet(lista2);
+            LinkedList<T> újlista = this.Filter((hős) => true);
+            LinkedList<T> metszet = this.Intersection(lista2);
 
-            Pointer<T> m1 = metszet.fej;
-            while (m1 != null) { újlista.Törlés(m1.adat); m1 = m1.next; }
+            Pointer<T> m1 = metszet.head;
+            while (m1 != null) { újlista.Delete(m1.data); m1 = m1.next; }
 
             return újlista;
         }
 
         public IEnumerator GetEnumerator()
         {
-            this.EnuMutato = new Pointer<T>(default(T), fej);
+            this.EnumeratorPointer = new Pointer<T>(default(T), head);
             return (IEnumerator)this;
         }
 
         public bool MoveNext()
         {
-            if (EnuMutato != null) EnuMutato = EnuMutato.next;
-            return EnuMutato != null;
+            if (EnumeratorPointer != null) EnumeratorPointer = EnumeratorPointer.next;
+            return EnumeratorPointer != null;
         }
 
         public void Reset()
         {
-            EnuMutato = new Pointer<T>(default(T), fej);
+            EnumeratorPointer = new Pointer<T>(default(T), head);
         }
     }
 }

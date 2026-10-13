@@ -189,7 +189,7 @@ namespace GraphTraversalGame
                 {
                     LinkedList<ND> allSzomszed = JatekGraf.Neighbors(node);
                     foreach (ND szomszCsucs in allSzomszed)
-                        if (!szomszCsucs.Infected) valaszthato.RendezveBeszúr(szomszCsucs);
+                        if (!szomszCsucs.Infected) valaszthato.SortedInsert(szomszCsucs);
                 }
             string mit; string valaszt = ""; foreach (ND node in valaszthato) valaszt += node;
             if (valaszt.Length == 0)
