@@ -25,18 +25,23 @@ namespace GraphTraversalGame
     public class LinkedList<T> : IEnumerable, IEnumerator
         where T : IComparable
     {
-        Pointer<T> head;
-        Pointer<T> forEach;
+        // Explicit private fields for the linked list nodes and enumerator state
+        private Pointer<T> head;
+        private Pointer<T> forEach;
         private Pointer<T> enumeratorPointer;
 
-        public LinkedList() { }
-
+        // Public delegates
         public delegate void IteratorFunction(T t);
         public delegate bool FilterFunction(T t);
         public IteratorFunction iteratorFunction;
 
+        // Public property
         public object Current => enumeratorPointer.data;
 
+        // Constructor
+        public LinkedList() { }
+
+        // Public methods
         public bool SortedInsert(T data)
         {
             Pointer<T> pointer = head; Pointer<T> previous = null;
@@ -102,13 +107,13 @@ namespace GraphTraversalGame
             { if (previous == null) head = pointer.next; else previous.next = pointer.next; }
         }
 
-        public LinkedList<T> Filter(FilterFunction szűrő)
+        public LinkedList<T> Filter(FilterFunction filter)
         {
             Pointer<T> pointer = head;
             LinkedList<T> newList = new LinkedList<T>();
             while (pointer != null)
             {
-                if (szűrő(pointer.data)) newList.SortedInsert(pointer.data);
+                if (filter(pointer.data)) newList.SortedInsert(pointer.data);
                 pointer = pointer.next;
             }
             return newList;
