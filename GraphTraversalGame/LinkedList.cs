@@ -27,7 +27,7 @@ namespace GraphTraversalGame
     {
         Pointer<T> head;
         Pointer<T> forEach;
-        Pointer<T> EnumeratorPointer;
+        private Pointer<T> enumeratorPointer;
 
         public LinkedList() { }
 
@@ -35,7 +35,7 @@ namespace GraphTraversalGame
         public delegate bool FilterFunction(T t);
         public IteratorFunction iteratorFunction;
 
-        public object Current => EnumeratorPointer.data;
+        public object Current => enumeratorPointer.data;
 
         public bool SortedInsert(T data)
         {
@@ -147,30 +147,30 @@ namespace GraphTraversalGame
 
         public LinkedList<T> Difference(LinkedList<T> lista2)
         {
-            LinkedList<T> újlista = this.Filter((hős) => true);
-            LinkedList<T> metszet = this.Intersection(lista2);
+            LinkedList<T> newList = Filter((hős) => true);
+            LinkedList<T> intersection = Intersection(lista2);
 
-            Pointer<T> m1 = metszet.head;
-            while (m1 != null) { újlista.Delete(m1.data); m1 = m1.next; }
+            Pointer<T> m1 = intersection.head;
+            while (m1 != null) { newList.Delete(m1.data); m1 = m1.next; }
 
-            return újlista;
+            return newList;
         }
 
         public IEnumerator GetEnumerator()
         {
-            this.EnumeratorPointer = new Pointer<T>(default(T), head);
+            enumeratorPointer = new Pointer<T>(default(T), head);
             return (IEnumerator)this;
         }
 
         public bool MoveNext()
         {
-            if (EnumeratorPointer != null) EnumeratorPointer = EnumeratorPointer.next;
-            return EnumeratorPointer != null;
+            if (enumeratorPointer != null) enumeratorPointer = enumeratorPointer.next;
+            return enumeratorPointer != null;
         }
 
         public void Reset()
         {
-            EnumeratorPointer = new Pointer<T>(default(T), head);
+            enumeratorPointer = new Pointer<T>(default(T), head);
         }
     }
 }
