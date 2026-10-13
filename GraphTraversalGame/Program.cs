@@ -1,4 +1,4 @@
-﻿namespace CABTEX_félévesSztf2
+﻿namespace GraphTraversalGame
 {
     internal class Program
     {

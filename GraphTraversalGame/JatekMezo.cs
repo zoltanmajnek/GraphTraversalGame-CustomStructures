@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace CABTEX_félévesSztf2
+namespace GraphTraversalGame
 {
     enum Fnev { Választás = 0, Rnd = 1, Moho = 2, BackTrack = 3 }
     internal class JatekMezo

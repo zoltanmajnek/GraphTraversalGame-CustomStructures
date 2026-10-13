@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CABTEX_félévesSztf2
+namespace GraphTraversalGame
 {
     internal class JatekVezerlo
     {

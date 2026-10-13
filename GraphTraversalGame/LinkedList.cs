@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace CABTEX_félévesSztf2
+namespace GraphTraversalGame
 {
     class M<T>
     {
