@@ -22,7 +22,7 @@ namespace GraphTraversalGame
         class Node : IComparable
         {
             public T data { get; }
-            public int Tav { get; set; }
+            public int Distance { get; set; }
             public LinkedList<Node> Edges { get; }
             public Node(T data)
             {
@@ -43,9 +43,9 @@ namespace GraphTraversalGame
 
         Node GetNodeFromData(T data)
         {
-            Nodes.IteratorInit(); Node keres;
-            do { keres = Nodes.NextData(); } while (keres != null && data.CompareTo(keres.data) > 0);
-            if (keres != null && keres.data.CompareTo(data) == 0) return keres;
+            Nodes.IteratorInit(); Node search;
+            do { search = Nodes.NextData(); } while (search != null && data.CompareTo(search.data) > 0);
+            if (search != null && search.data.CompareTo(data) == 0) return search;
             return null;
         }
 
@@ -67,7 +67,7 @@ namespace GraphTraversalGame
         }
         public int Ertek(T node)
         {
-            var RNode = GetNodeFromData(node); if (RNode != null) return RNode.Tav;
+            var RNode = GetNodeFromData(node); if (RNode != null) return RNode.Distance;
             return -1;
         }
 
@@ -107,16 +107,16 @@ namespace GraphTraversalGame
             connectedNodes = 1;
             Node nFrom = GetNodeFromData(from); if (nFrom == null) return 0;
             LinkedList<Node> S = new LinkedList<Node>(); S.RowInsert(nFrom);
-            LinkedList<Node> F = new LinkedList<Node>(); nFrom.Tav = 0; F.RowInsert(nFrom);
+            LinkedList<Node> F = new LinkedList<Node>(); nFrom.Distance = 0; F.RowInsert(nFrom);
 
             while (!S.Empty)
             {
                 Node k = S.RowOut();
                 if (from.CompareTo(to) == 0) process?.Invoke(k.data);
-                else if (k.data.CompareTo(to) == 0) return k.Tav;
+                else if (k.data.CompareTo(to) == 0) return k.Distance;
                 foreach (Node node in k.Edges)
                     if (!F.Search(node))
-                    { S.RowInsert(node); node.Tav = k.Tav + 1; F.RowInsert(node); connectedNodes++; }
+                    { S.RowInsert(node); node.Distance = k.Distance + 1; F.RowInsert(node); connectedNodes++; }
             }
             return 0;
         }
@@ -135,13 +135,13 @@ namespace GraphTraversalGame
             return lista;
         }
 
-        public void TavRezet() { foreach (Node node in Nodes) node.Tav = 1000; }
+        public void TavRezet() { foreach (Node node in Nodes) node.Distance = 1000; }
 
         public void FirstInfected(T from)
         {
             Node nFrom = GetNodeFromData(from);
             LinkedList<Node> S = new LinkedList<Node>(); S.RowInsert(nFrom);
-            LinkedList<Node> F = new LinkedList<Node>(); nFrom.Tav = 0; F.RowInsert(nFrom);
+            LinkedList<Node> F = new LinkedList<Node>(); nFrom.Distance = 0; F.RowInsert(nFrom);
             bool found = false;
 
             while (!S.Empty && !found)
@@ -171,7 +171,7 @@ namespace GraphTraversalGame
             if (tovabb) foreach (Node node in k.Edges)
                     if (!F.Search(node))
                     { DFSRek(node, ref F, ref t); }
-            k.Tav = t++;
+            k.Distance = t++;
         }
     }
 }
