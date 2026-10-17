@@ -135,7 +135,7 @@ namespace GraphTraversalGame
             return lista;
         }
 
-        public void TavRezet() { foreach (Node node in Nodes) node.Distance = 1000; }
+        public void ResetDistance() { foreach (Node node in Nodes) node.Distance = 1000; }
 
         public void FirstInfected(T from)
         {
@@ -161,16 +161,24 @@ namespace GraphTraversalGame
             int t = 0;
             LinkedList<Node> F = new LinkedList<Node>();
             var firstNode = GetNodeFromData(start);
-            if (firstNode != null) DFSRek(firstNode, ref F, ref t);
+            if (firstNode != null) DfsRecursive(firstNode, ref F, ref t);
             return t;
         }
-        void DFSRek(Node k, ref LinkedList<Node> F, ref int t)
+
+        void DfsRecursive(Node k, ref LinkedList<Node> F, ref int t)
         {
-            bool tovabb = true;
-            F.SortedInsert(k); t++; if (process != null) tovabb = process(k.data);
-            if (tovabb) foreach (Node node in k.Edges)
+            bool ContinueDFS = true;
+            F.SortedInsert(k); t++; if (process != null) ContinueDFS = process(k.data);
+            if (ContinueDFS)
+            {
+                foreach (Node node in k.Edges)
+                {
                     if (!F.Search(node))
-                    { DFSRek(node, ref F, ref t); }
+                    {
+                        DfsRecursive(node, ref F, ref t);
+                    }
+                }
+            }
             k.Distance = t++;
         }
     }

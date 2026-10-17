@@ -299,10 +299,10 @@ namespace GraphTraversalGame
 
             void GepLepBackTrack()
             {
-                bool NotInfectedKeres(ND k) { return !k.Infected; }
+                bool SearchNotInfected(ND k) { return !k.Infected; }
 
                 ND max = null; int maxDFS = 0;
-                JatekGraf.process = NotInfectedKeres;
+                JatekGraf.process = SearchNotInfected;
                 if (!GepLepMoho(true))
                 {
                     foreach (ND node in allNodes)
